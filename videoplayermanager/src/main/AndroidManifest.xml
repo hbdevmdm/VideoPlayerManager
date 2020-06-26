@@ -9,7 +9,7 @@
     <application>
         <activity
             android:resizeableActivity="true"
-            android:name="com.hb.videoplayermanager.MediaPlayerActivity"
+            android:name="com.hb.videoplayermanager.VideoPlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout"
             android:supportsPictureInPicture="true"
             android:theme="@style/ThemeVideo" />

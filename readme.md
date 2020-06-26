@@ -32,11 +32,16 @@ implementation 'com.hb.videoeditor:videoplayer:1.1'
 
 # How it works?
 ```kotlin
-val intent = Intent(this, MediaPlayerActivity::class.java)
-intent.putExtra(EXTRA_PATH, path)
-intent.putExtra(AUTO_PLAY, true)
-intent.putExtra(ALLOW_PICTURE_IN_PICTURE, true)
-startActivity(intent)
+  val videoPlayerConfig =
+            VideoPlayerConfig
+                .Builder()
+                .videoPath(path)
+                .allowPictureInPicture(true)
+                .autoPlay(true)
+                .loopVideo(true)
+                .orientation(VideoPlayerConfig.ORIENTATION_LANDSCAPE_ONLY)
+                .build()
+        startActivity(VideoPlayerActivity.createIntent(this, videoPlayerConfig))
 ```
 
 

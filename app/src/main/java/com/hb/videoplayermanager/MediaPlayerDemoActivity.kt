@@ -112,11 +112,16 @@ class MediaPlayerDemoActivity : AppCompatActivity() {
     }
 
     private fun openPlayer(path: String) {
-        val intent = Intent(this, MediaPlayerActivity::class.java)
-        intent.putExtra("autoPlay", true)
-        intent.putExtra("allowPictureInPicture", true)
-        intent.putExtra(EXTRA_PATH, path)
-        startActivity(intent)
+        val videoPlayerConfig =
+            VideoPlayerConfig
+                .Builder()
+                .videoPath(path)
+                .allowPictureInPicture(true)
+                .autoPlay(true)
+                .loopVideo(true)
+                .orientation(VideoPlayerConfig.ORIENTATION_LANDSCAPE_ONLY)
+                .build()
+        startActivity(VideoPlayerActivity.createIntent(this, videoPlayerConfig))
     }
 
     override fun onRequestPermissionsResult(

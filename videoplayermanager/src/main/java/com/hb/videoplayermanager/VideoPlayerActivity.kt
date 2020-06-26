@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.Icon
@@ -26,18 +27,13 @@ import com.google.android.exoplayer2.C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROP
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player.*
 import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.analytics.AnalyticsListener
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoListener
 import com.hb.videoplayermanager.databinding.ActivityMediaPlayerBinding
 
 
-class MediaPlayerActivity : AppCompatActivity(), AnalyticsListener {
-
-    private var videoPath: String? = ""
-    private var allowPictureInPicture = false
-    private var autoPlay = false
+class VideoPlayerActivity : AppCompatActivity() {
 
 
     private lateinit var binding: ActivityMediaPlayerBinding
@@ -48,11 +44,13 @@ class MediaPlayerActivity : AppCompatActivity(), AnalyticsListener {
     private var videoWidth: Int = 0
     private var videoHeight: Int = 0
 
-
     companion object {
-        const val EXTRA_PATH = "EXTRA_PATH"
-        const val ALLOW_PICTURE_IN_PICTURE = "allowPictureInPicture"
-        const val AUTO_PLAY = "autoPlay"
+
+        fun createIntent(context: Context, videoPlayerConfig: VideoPlayerConfig): Intent {
+            val intentX = Intent(context, VideoPlayerActivity::class.java)
+            intentX.putExtra("videoPlayerConfig", videoPlayerConfig)
+            return intentX
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,22 +61,24 @@ class MediaPlayerActivity : AppCompatActivity(), AnalyticsListener {
         requestPictureInPicturePermission()
     }
 
+    lateinit var videoPlayerConfig: VideoPlayerConfig
     private fun init() {
         if (intent != null) {
-            videoPath = intent.getStringExtra(EXTRA_PATH)
-            allowPictureInPicture = intent.getBooleanExtra("allowPictureInPicture", false)
-            autoPlay = intent.getBooleanExtra("autoPlay", false)
+            videoPlayerConfig =
+                intent.getSerializableExtra("videoPlayerConfig") as VideoPlayerConfig
         }
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     private fun initializePlayer() {
 
         simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(this)
 
-        val mediaSource = ExoPlayerHelper.buildMediaSource(this, Uri.parse(videoPath))
+        val mediaSource =
+            ExoPlayerHelper.buildMediaSource(this, Uri.parse(videoPlayerConfig.videoPath))
 
         simpleExoPlayer.prepare(mediaSource, false, false)
-        simpleExoPlayer.playWhenReady = autoPlay
+        simpleExoPlayer.playWhenReady = videoPlayerConfig.autoPlay
 
         binding.playerView.setShutterBackgroundColor(Color.TRANSPARENT)
         binding.playerView.player = simpleExoPlayer
@@ -158,10 +158,26 @@ class MediaPlayerActivity : AppCompatActivity(), AnalyticsListener {
                 videoHeight = height
             }
         })
+
+        simpleExoPlayer.repeatMode =
+            if (videoPlayerConfig.loopVideo) REPEAT_MODE_ALL else REPEAT_MODE_OFF
+
+        when (videoPlayerConfig.orientation) {
+            VideoPlayerConfig.ORIENTATION_PORTRAIT_ONLY -> {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            }
+            VideoPlayerConfig.ORIENTATION_LANDSCAPE_ONLY -> {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE
+            }
+            VideoPlayerConfig.ORIENTATION_USER_ORIENTATION -> {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_USER
+            }
+        }
+
     }
 
     private fun showToast(message: String) {
-        val toast = Toast.makeText(this@MediaPlayerActivity, message, Toast.LENGTH_SHORT)
+        val toast = Toast.makeText(this@VideoPlayerActivity, message, Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.TOP, 0, 0)
         toast.show()
     }
@@ -244,7 +260,7 @@ class MediaPlayerActivity : AppCompatActivity(), AnalyticsListener {
     }
 
     private fun goPIP() {
-        if (allowPictureInPicture && canEnterPiPMode()) {
+        if (videoPlayerConfig.allowPictureInPicture && canEnterPiPMode()) {
             if (supportsPiPMode()) {
                 val pictureInPictureParams = if (simpleExoPlayer.playWhenReady) {
                     getActionPlayBased()
