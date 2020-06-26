@@ -1,0 +1,62 @@
+package com.hb.videoplayermanager
+
+import android.net.Uri
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.SimpleExoPlayer
+import com.hb.videoplayermanager.databinding.ActivityMediaPagerBinding
+import com.hb.videoplayermanager.databinding.ItemMediaPagerBinding
+import easyadapter.dc.com.library.EasyAdapter
+
+class MediaPlayerPagerActivity : AppCompatActivity() {
+    lateinit var binding: ActivityMediaPagerBinding
+    private lateinit var simpleExoPlayer: SimpleExoPlayer
+    private var currentPlayerView: CustomExoPlayerView? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_media_pager)
+        simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(this)
+
+
+        val adapter =
+            object : EasyAdapter<String, ItemMediaPagerBinding>(R.layout.item_media_pager) {
+                override fun onBind(itemBinding: ItemMediaPagerBinding, data: String) {
+                    /*currentPlayerView?.player = null
+                    currentPlayerView = itemBinding.playerView
+                    simpleExoPlayer.playWhenReady = false
+                    simpleExoPlayer.stop(true)*/
+                    /*simpleExoPlayer.release()*/
+                    simpleExoPlayer.playWhenReady = false
+                    val mediaSource = ExoPlayerHelper.buildMediaSource(
+                        this@MediaPlayerPagerActivity,
+                        Uri.parse(data)
+                    )
+                    simpleExoPlayer.prepare(mediaSource, false, false)
+                    simpleExoPlayer.playWhenReady = true
+                    itemBinding.playerView.player = simpleExoPlayer
+
+                }
+            }
+
+        binding.viewPager.adapter = adapter
+        binding.viewPager.orientation = ViewPager2.ORIENTATION_VERTICAL
+
+        adapter.addOnly("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4")
+        adapter.addOnly("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4")
+        adapter.addOnly("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4")
+
+        adapter.notifyDataSetChanged()
+
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+            }
+        })
+
+    }
+}
