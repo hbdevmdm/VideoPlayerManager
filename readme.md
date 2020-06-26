@@ -31,12 +31,13 @@ implementation 'com.hb.videoeditor:videoplayer:1.1'
 ```
 
 # How it works?
-
+```kotlin
 val intent = Intent(this, MediaPlayerActivity::class.java)
 intent.putExtra(EXTRA_PATH, path)
 intent.putExtra(AUTO_PLAY, true)
 intent.putExtra(ALLOW_PICTURE_IN_PICTURE, true)
 startActivity(intent)
+```
 
 
 # License
