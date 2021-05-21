@@ -55,28 +55,28 @@
         android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="@dimen/_4sdp"
-        android:paddingEnd="@dimen/_4sdp"
-        android:paddingBottom="@dimen/_5sdp">
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:paddingBottom="5dp">
 
-        <ImageButton
-            android:id="@id/exo_play"
-            style="@style/ExoMediaButton.Play" />
 
-        <ImageButton
-            android:id="@id/exo_pause"
-            style="@style/ExoMediaButton.Pause" />
 
         <TextView
             android:id="@id/exo_position"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_marginEnd="5dp"
             android:includeFontPadding="false"
             android:textColor="#FFBEBEBE"
-            android:textSize="@dimen/_14ssp"
+            android:textSize="16sp"
             android:textStyle="normal"
             tools:text="00.00" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivMute"
+            android:src="@drawable/ic_mute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <com.google.android.exoplayer2.ui.DefaultTimeBar
             android:id="@id/exo_progress"
@@ -95,19 +95,31 @@
             android:id="@id/exo_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginStart="5dp"
             android:includeFontPadding="false"
             android:textColor="#FFBEBEBE"
-            android:textSize="@dimen/_14ssp"
+            android:textSize="16sp"
             android:textStyle="normal"
             tools:text="00.00" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:padding="5dp"
+            android:id="@+id/exo_speed"
+            android:textColor="#FFBEBEBE"
+            android:textSize="16sp"
+            android:layout_marginStart="5dp"
+            android:includeFontPadding="false"
+            android:textStyle="normal"
+            android:text="1x"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <ImageView
             android:id="@+id/iv_toggle_full_screen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:padding="@dimen/_4sdp"
+            android:layout_marginStart="4dp"
+            android:padding="4dp"
             android:src="@drawable/ic_full_screen"
             android:visibility="gone" />
 
@@ -129,5 +141,22 @@
         </FrameLayout>
 
     </LinearLayout>
+
+
+    <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="@drawable/ic_round_background"
+        android:layout_centerInParent="true"
+        android:id="@id/exo_play"
+        style="@style/ExoMediaButton.Play" />
+
+    <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="@drawable/ic_round_background"
+        android:layout_centerInParent="true"
+        android:id="@id/exo_pause"
+        style="@style/ExoMediaButton.Pause" />
 
 </RelativeLayout>

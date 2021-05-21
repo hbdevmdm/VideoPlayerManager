@@ -1,16 +1,25 @@
 package com.hb.videoplayermanager;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
 
 import androidx.core.view.GestureDetectorCompat;
 
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.hb.videoplayermanager.databinding.PopupSpeedOptionBinding;
 
 /**
  * Custom player class for Double-Tapping listening
@@ -64,7 +73,99 @@ public final class CustomExoPlayerView extends PlayerView {
         super(context, attrs, defStyleAttr);
         mDetector = new GestureDetectorCompat(context, new DoubleTapGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(context, new ScaleGestureListener());
+        init();
 
+    }
+
+    private float currentVolume;
+
+    private void init() {
+        ImageView ivMute = findViewById(R.id.ivMute);
+        ivMute.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*Toast.makeText(v.getContext(), "Mute clicked", Toast.LENGTH_SHORT).show();*/
+                Player.AudioComponent audioComponent = getPlayer().getAudioComponent();
+
+                if (audioComponent != null) {
+                    if (audioComponent.getVolume() == 0.0f) {
+                        ivMute.setImageResource(R.drawable.ic_unmute);
+                        audioComponent.setVolume(currentVolume);
+                    } else {
+                        currentVolume = audioComponent.getVolume();
+                        ivMute.setImageResource(R.drawable.ic_mute);
+                        audioComponent.setVolume(0.0f);
+                    }
+                }
+            }
+        });
+
+        findViewById(R.id.exo_speed).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*Toast.makeText(v.getContext(), "Speed clicked", Toast.LENGTH_SHORT).show();*/
+                showSpeedPopup(v);
+            }
+        });
+
+
+        findViewById(R.id.exo_fullscreen_button).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VideoPlayerConfig videoPlayerConfig = new VideoPlayerConfig.Builder().videoPath(url)
+                        .orientation(VideoPlayerConfig.ORIENTATION_USER_ORIENTATION)
+                        .setStartTime(getPlayer().getCurrentPosition())
+                        .autoPlay(true)
+                        .build();
+                getContext().startActivity(VideoPlayerActivity.Companion.createIntent(getContext(), videoPlayerConfig));
+            }
+        });
+
+        setShowBuffering(PlayerView.SHOW_BUFFERING_ALWAYS);
+
+    }
+
+    private void showSpeedPopup(View view) {
+        PopupWindow popup = new PopupWindow(this);
+        popup.setBackgroundDrawable(new BitmapDrawable());
+        popup.setOutsideTouchable(true);
+        PopupSpeedOptionBinding bindingX = PopupSpeedOptionBinding.inflate(LayoutInflater.from(getContext()), this, false);
+        popup.setContentView(bindingX.getRoot());
+        popup.showAtLocation(view, Gravity.TOP, (int) view.getX() - 100, (int) view.getY() - 50);
+        popup.setOutsideTouchable(true);
+
+        bindingX.onex.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popup.dismiss();
+                getPlayerEx().setPlaybackParameters(new PlaybackParameters(1.0f));
+                /*invalidateSpeedTextView(1.0f)    */
+            }
+        });
+
+        bindingX.onepointfivex.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popup.dismiss();
+                getPlayerEx().setPlaybackParameters(new PlaybackParameters(1.5f));
+            }
+        });
+
+        bindingX.twopointzero.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popup.dismiss();
+                getPlayerEx().setPlaybackParameters(new PlaybackParameters(2.0f));
+            }
+        });
+
+        bindingX.pointfive.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popup.dismiss();
+                getPlayerEx().setPlaybackParameters(new PlaybackParameters(0.5f));
+            }
+        });
     }
 
     /**
@@ -214,5 +315,20 @@ public final class CustomExoPlayerView extends PlayerView {
 
     public void setOnPinchListener(OnPinchListener onPinchListener) {
         this.onPinchListener = onPinchListener;
+    }
+
+    public Player getPlayerEx() {
+        getPlayer().setPlayWhenReady(true);
+        return getPlayer();
+    }
+
+    public void playWhenReady() {
+        getPlayer().setPlayWhenReady(true);
+    }
+
+    private String url;
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.yt_overlay.view.*
  * Android Ripple (I didn't find any options in the documentation ...).
  */
 class ForwardViewOverlay(context: Context?, private val attrs: AttributeSet?) :
-    ConstraintLayout(context, attrs), PlayerDoubleTapListener {
+    ConstraintLayout(context!!, attrs), PlayerDoubleTapListener {
 
     constructor(context: Context?) : this(context, null) {
         // Hide overlay initially when added programmatically

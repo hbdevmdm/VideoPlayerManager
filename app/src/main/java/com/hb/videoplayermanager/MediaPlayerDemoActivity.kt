@@ -122,6 +122,7 @@ class MediaPlayerDemoActivity : AppCompatActivity() {
                 .orientation(VideoPlayerConfig.ORIENTATION_LANDSCAPE_ONLY)
                 .build()
         startActivity(VideoPlayerActivity.createIntent(this, videoPlayerConfig))
+        /*startActivity(Intent(this,MediaPlayerPagerActivity::class.java))*/
     }
 
     override fun onRequestPermissionsResult(
