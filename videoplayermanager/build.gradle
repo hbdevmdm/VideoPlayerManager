@@ -32,8 +32,6 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 70
-        versionName "0.7.0"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -75,12 +73,7 @@ dependencies {
     api 'com.google.android.exoplayer:exoplayer:2.10.6'
     api 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'pl.droidsonroids:casty:1.0.8'
+    implementation 'androidx.mediarouter:mediarouter:1.2.4'
 }
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
 
-
-bintray {
-    key = '5d1d9971631c5cebde8337a06c71b037f3971b59'
-    user = 'hbdevmdm'
-}

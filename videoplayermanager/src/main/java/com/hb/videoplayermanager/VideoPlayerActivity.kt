@@ -13,10 +13,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
 import android.util.DisplayMetrics
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.WindowManager
+import android.view.*
 import android.widget.FrameLayout
 import android.widget.PopupWindow
 import android.widget.TextView
@@ -25,14 +22,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.android.exoplayer2.C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
 import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.Player.*
-import com.google.android.exoplayer2.Player.EventListener
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoListener
 import com.hb.videoplayermanager.databinding.ActivityMediaPlayerBinding
 import com.hb.videoplayermanager.databinding.PopupSpeedOptionBinding
+import pl.droidsonroids.casty.Casty
+import pl.droidsonroids.casty.MediaData
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -55,23 +54,52 @@ class VideoPlayerActivity : AppCompatActivity() {
         }
     }
 
+    var casty: Casty? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         init()
         if (videoPlayerConfig.secureScreen) {
-            window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
-                    WindowManager.LayoutParams.FLAG_SECURE)
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
+            )
         }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_media_player)
 
+        val castButton =
+            findViewById<View>(R.id.media_route_button) as androidx.mediarouter.app.MediaRouteButton
+
+        casty = Casty.create(this).withMiniController()
+        casty?.setUpMediaRouteButton(castButton)
+
+        castButton.setOnClickListener {
+            if (casty?.isConnected == true) {
+                val mediaData = MediaData.Builder(videoPlayerConfig.videoPath)
+                    .setStreamType(MediaData.STREAM_TYPE_BUFFERED) //required
+                    .setContentType("videos/mp4") //required
+                    .setMediaType(MediaData.MEDIA_TYPE_MOVIE)
+                    .setTitle("Video")
+                    .setPosition(simpleExoPlayer.currentPosition)
+                    .setAutoPlay(true)
+                    .build()
+
+                if (casty?.player?.isPlaying == false) {
+                    casty?.player?.loadMediaAndPlay(mediaData)
+                    casty?.player?.play()
+                }
+            }
+
+        }
 
         requestDrmText()
     }
 
+
     lateinit var videoPlayerConfig: VideoPlayerConfig
     private fun init() {
         if (intent != null) {
-            videoPlayerConfig = intent.getSerializableExtra("videoPlayerConfig") as VideoPlayerConfig
+            videoPlayerConfig =
+                intent.getSerializableExtra("videoPlayerConfig") as VideoPlayerConfig
         }
     }
 
@@ -81,10 +109,14 @@ class VideoPlayerActivity : AppCompatActivity() {
         simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(this)
 
         val mediaSource =
-                if (videoPlayerConfig.encryptionConfig != null)
-                    ExoPlayerHelper.buildEncryptedMediaSource(this, Uri.parse(videoPlayerConfig.videoPath), videoPlayerConfig.encryptionConfig!!)
-                else
-                    ExoPlayerHelper.buildMediaSource(this, Uri.parse(videoPlayerConfig.videoPath))
+            if (videoPlayerConfig.encryptionConfig != null)
+                ExoPlayerHelper.buildEncryptedMediaSource(
+                    this,
+                    Uri.parse(videoPlayerConfig.videoPath),
+                    videoPlayerConfig.encryptionConfig!!
+                )
+            else
+                ExoPlayerHelper.buildMediaSource(this, Uri.parse(videoPlayerConfig.videoPath))
 
         simpleExoPlayer.prepare(mediaSource, false, false)
         simpleExoPlayer.seekTo(videoPlayerConfig.startTime.toLong())
@@ -94,7 +126,7 @@ class VideoPlayerActivity : AppCompatActivity() {
         binding.playerView.player = simpleExoPlayer
         binding.playerView.requestFocus()
 
-        simpleExoPlayer.addListener(object : EventListener {
+        simpleExoPlayer.addListener(object : Player.EventListener {
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
                 when (playbackState) {
                     STATE_BUFFERING -> {
@@ -123,8 +155,8 @@ class VideoPlayerActivity : AppCompatActivity() {
         }
 
         binding.playerView.activateDoubleTap(true)
-                .setDoubleTapDelay(300)
-                .setDoubleTapListener(binding.youtubeOverlay)
+            .setDoubleTapDelay(300)
+            .setDoubleTapListener(binding.youtubeOverlay)
         binding.youtubeOverlay.setPlayer(simpleExoPlayer)
         binding.youtubeOverlay.animationDuration = 1000
 
@@ -144,16 +176,16 @@ class VideoPlayerActivity : AppCompatActivity() {
         simpleExoPlayer.addVideoListener(object : VideoListener {
 
             override fun onVideoSizeChanged(
-                    width: Int,
-                    height: Int,
-                    unappliedRotationDegrees: Int,
-                    pixelWidthHeightRatio: Float
+                width: Int,
+                height: Int,
+                unappliedRotationDegrees: Int,
+                pixelWidthHeightRatio: Float
             ) {
                 super.onVideoSizeChanged(
-                        width,
-                        height,
-                        unappliedRotationDegrees,
-                        pixelWidthHeightRatio
+                    width,
+                    height,
+                    unappliedRotationDegrees,
+                    pixelWidthHeightRatio
                 )
                 videoWidth = width
                 videoHeight = height
@@ -161,7 +193,7 @@ class VideoPlayerActivity : AppCompatActivity() {
         })
 
         simpleExoPlayer.repeatMode =
-                if (videoPlayerConfig.loopVideo) REPEAT_MODE_ALL else REPEAT_MODE_OFF
+            if (videoPlayerConfig.loopVideo) REPEAT_MODE_ALL else REPEAT_MODE_OFF
 
         when (videoPlayerConfig.orientation) {
             VideoPlayerConfig.ORIENTATION_PORTRAIT_ONLY -> {
@@ -187,7 +219,7 @@ class VideoPlayerActivity : AppCompatActivity() {
             showSpeedPopup(it)
         }
 
-        binding.ivPip.visibility=View.GONE
+        binding.ivPip.visibility = View.GONE
     }
 
     private fun showSpeedPopup(view: View) {

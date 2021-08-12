@@ -159,4 +159,15 @@
         android:id="@id/exo_pause"
         style="@style/ExoMediaButton.Pause" />
 
+
+    <androidx.mediarouter.app.MediaRouteButton
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="50dp"
+        android:layout_alignParentRight="true"
+        android:id="@+id/media_route_button"
+        android:padding="10dp"
+        android:background="@drawable/rounded_rect_white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </RelativeLayout>
