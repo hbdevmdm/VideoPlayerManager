@@ -9,19 +9,19 @@ class EncryptedFileDataSourceFactory(var dataSource: DataSource, var cipher: Cip
 
     override fun createDataSource(): DataSource {
         return EncryptedDataSource(cipher, object : TransferListener {
-            override fun onTransferInitializing(source: DataSource?, dataSpec: DataSpec?, isNetwork: Boolean) {
+            override fun onTransferInitializing(source: DataSource, dataSpec: DataSpec, isNetwork: Boolean) {
 
             }
 
-            override fun onTransferStart(source: DataSource?, dataSpec: DataSpec?, isNetwork: Boolean) {
+            override fun onTransferStart(source: DataSource, dataSpec: DataSpec, isNetwork: Boolean) {
 
             }
 
-            override fun onBytesTransferred(source: DataSource?, dataSpec: DataSpec?, isNetwork: Boolean, bytesTransferred: Int) {
+            override fun onBytesTransferred(source: DataSource, dataSpec: DataSpec, isNetwork: Boolean, bytesTransferred: Int) {
 
             }
 
-            override fun onTransferEnd(source: DataSource?, dataSpec: DataSpec?, isNetwork: Boolean) {
+            override fun onTransferEnd(source: DataSource, dataSpec: DataSpec, isNetwork: Boolean) {
 
             }
         })
