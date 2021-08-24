@@ -60,7 +60,6 @@
         android:paddingBottom="5dp">
 
 
-
         <TextView
             android:id="@id/exo_position"
             android:layout_width="wrap_content"
@@ -74,9 +73,9 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivMute"
-            android:src="@drawable/ic_mute"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_mute" />
 
         <com.google.android.exoplayer2.ui.DefaultTimeBar
             android:id="@id/exo_progress"
@@ -103,16 +102,16 @@
             tools:text="00.00" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:padding="5dp"
             android:id="@+id/exo_speed"
-            android:textColor="#FFBEBEBE"
-            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:includeFontPadding="false"
-            android:textStyle="normal"
+            android:padding="5dp"
             android:text="1x"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:textColor="#FFBEBEBE"
+            android:textSize="16sp"
+            android:textStyle="normal" />
 
         <ImageView
             android:id="@+id/iv_toggle_full_screen"
@@ -144,30 +143,40 @@
 
 
     <ImageButton
+        android:id="@id/exo_play"
+        style="@style/ExoMediaButton.Play"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:background="@drawable/ic_round_background"
         android:layout_centerInParent="true"
-        android:id="@id/exo_play"
-        style="@style/ExoMediaButton.Play" />
+        android:background="@drawable/ic_round_background" />
 
     <ImageButton
+        android:id="@id/exo_pause"
+        style="@style/ExoMediaButton.Pause"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:background="@drawable/ic_round_background"
         android:layout_centerInParent="true"
-        android:id="@id/exo_pause"
-        style="@style/ExoMediaButton.Pause" />
+        android:background="@drawable/ic_round_background" />
 
 
     <androidx.mediarouter.app.MediaRouteButton
+        android:id="@+id/media_route_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
         android:layout_marginTop="20dp"
         android:layout_marginRight="50dp"
-        android:layout_alignParentRight="true"
-        android:id="@+id/media_route_button"
-        android:padding="10dp"
         android:background="@drawable/rounded_rect_white"
+        android:padding="10dp" />
+
+    <ImageView
+        android:id="@+id/ivClose"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/ic_close" />
 </RelativeLayout>

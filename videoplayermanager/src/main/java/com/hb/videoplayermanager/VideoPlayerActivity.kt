@@ -91,6 +91,7 @@ class VideoPlayerActivity : AppCompatActivity() {
 
         }
 
+        val closeButton = findViewById<View>(R.id.ivClose).setOnClickListener { finish() }
         requestDrmText()
     }
 
