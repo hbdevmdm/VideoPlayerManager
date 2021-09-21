@@ -25,15 +25,15 @@ class MediaPlayerDemoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_media_player_demo)
-        binding.tvPlay.setOnClickListener {
+        /*binding = DataBindingUtil.setContentView(this, R.layout.activity_media_player_demo)*/
+        /*binding.tvPlay.setOnClickListener {
             permissionHelper?.requestAll {
                 openGallery()
             }
         }
         init()
         makeItFullscreen(window)
-        changeStatusbarIcon(true)
+        changeStatusbarIcon(true)*/
 
         openPlayer("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")
     }

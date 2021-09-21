@@ -357,8 +357,8 @@ public class Casty implements CastyPlayer.OnMediaLoadedListener {
     }
 
     private void startExpandedControlsActivity() {
-        Intent intent = new Intent(activity, ExpandedControlsActivity.class);
-        activity.startActivity(intent);
+        /*Intent intent = new Intent(activity, ExpandedControlsActivity.class);
+        activity.startActivity(intent);*/
     }
 
     public interface OnConnectChangeListener {

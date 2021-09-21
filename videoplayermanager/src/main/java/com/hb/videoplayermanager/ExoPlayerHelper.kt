@@ -23,13 +23,8 @@ import javax.crypto.spec.SecretKeySpec
 class ExoPlayerHelper {
     companion object {
         fun buildMediaSource(context: Context, uri: Uri): MediaSource {
-            val mDataSourceFactory = CacheDataSource.Factory().setCache(VideoCache.get(context))
-                .setCacheReadDataSourceFactory(
-                    DefaultDataSourceFactory(
-                        context,
-                        Util.getUserAgent(context, "mediaPlayerSample")
-                    )
-                )
+            val mDataSourceFactory =
+                DefaultDataSourceFactory(context, Util.getUserAgent(context, "mediaPlayerSample"))
             /*val mDataSourceFactory =
                     CacheDataSourceFactory(VideoCache.get(context), DefaultDataSourceFactory(context,
                             Util.getUserAgent(context, "mediaPlayerSample")))*/

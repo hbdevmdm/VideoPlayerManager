@@ -1,6 +1,8 @@
 package com.hb.videoplayermanager.casty;
 
 import android.content.Context;
+
+import com.google.android.gms.cast.LaunchOptions;
 import com.google.android.gms.cast.framework.CastOptions;
 import com.google.android.gms.cast.framework.OptionsProvider;
 import com.google.android.gms.cast.framework.SessionProvider;
@@ -20,12 +22,12 @@ public class CastOptionsProvider implements OptionsProvider {
 
             NotificationOptions notificationOptions = new NotificationOptions.Builder()
                     .setActions(buttonActions, compatButtonAction)
-                    .setTargetActivityClassName(ExpandedControlsActivity.class.getName())
+                    /*.setTargetActivityClassName(ExpandedControlsActivity.class.getName())*/
                     .build();
 
             CastMediaOptions mediaOptions = new CastMediaOptions.Builder()
                     .setNotificationOptions(notificationOptions)
-                    .setExpandedControllerActivityClassName(ExpandedControlsActivity.class.getName())
+                    /*.setExpandedControllerActivityClassName(ExpandedControlsActivity.class.getName())*/
                     .build();
 
             return new CastOptions.Builder()

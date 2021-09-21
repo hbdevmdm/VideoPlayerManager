@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.PopupWindow
@@ -25,9 +26,14 @@ import com.google.android.exoplayer2.C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROP
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.Player.*
 import com.google.android.exoplayer2.SimpleExoPlayer
+
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
+import com.google.android.exoplayer2.ui.DefaultTimeBar
+import com.google.android.exoplayer2.ui.TimeBar
 import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoListener
+import com.google.android.gms.cast.MediaSeekOptions
+import com.google.android.gms.cast.framework.CastContext
 import com.hb.videoplayermanager.databinding.ActivityMediaPlayerBinding
 import com.hb.videoplayermanager.databinding.PopupSpeedOptionBinding
 import com.hb.videoplayermanager.casty.Casty
@@ -69,8 +75,21 @@ class VideoPlayerActivity : AppCompatActivity() {
         val castButton =
             findViewById<View>(R.id.media_route_button) as androidx.mediarouter.app.MediaRouteButton
 
-        casty = Casty.create(this).withMiniController()
+        casty = Casty.create(this)
         casty?.setUpMediaRouteButton(castButton)
+        casty?.setOnConnectChangeListener(object : Casty.OnConnectChangeListener {
+            override fun onConnected() {
+                simpleExoPlayer.pause()
+                Log.e("Asdas", "xxx")
+            }
+
+            override fun onDisconnected() {
+                simpleExoPlayer.play()
+                Log.e("Asdas", "yyy")
+            }
+        })
+
+
 
         castButton.setOnClickListener {
             if (casty?.isConnected == true) {
@@ -126,6 +145,7 @@ class VideoPlayerActivity : AppCompatActivity() {
         binding.playerView.setShutterBackgroundColor(Color.TRANSPARENT)
         binding.playerView.player = simpleExoPlayer
         binding.playerView.requestFocus()
+
 
         simpleExoPlayer.addListener(object : Player.EventListener {
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
@@ -219,6 +239,20 @@ class VideoPlayerActivity : AppCompatActivity() {
         findViewById<View>(R.id.exo_speed).setOnClickListener {
             showSpeedPopup(it)
         }
+
+        /*findViewById<DefaultTimeBar>(R.id.exo_progress).addListener(object:TimeBar.OnScrubListener{
+            override fun onScrubStart(timeBar: TimeBar, position: Long) {
+
+            }
+
+            override fun onScrubMove(timeBar: TimeBar, position: Long) {
+
+            }
+
+            override fun onScrubStop(timeBar: TimeBar, position: Long, canceled: Boolean) {
+                *//*CastContext.getSharedInstance()?.sessionManager?.currentCastSession?.remoteMediaClient?.seek(position)*//*
+            }
+        })*/
 
         binding.ivPip.visibility = View.GONE
     }
