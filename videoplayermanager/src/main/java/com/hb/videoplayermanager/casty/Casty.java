@@ -1,4 +1,4 @@
-package pl.droidsonroids.casty;
+package com.hb.videoplayermanager.casty;
 
 import android.app.Activity;
 import android.app.Application;
@@ -27,6 +27,7 @@ import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.hb.videoplayermanager.R;
 
 /**
  * Core class of Casty. It manages buttons/widgets and gives access to the media player.

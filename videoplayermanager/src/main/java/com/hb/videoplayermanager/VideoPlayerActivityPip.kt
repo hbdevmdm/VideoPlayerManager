@@ -30,7 +30,7 @@ import androidx.core.app.AppOpsManagerCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.google.android.exoplayer2.C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
-import com.google.android.exoplayer2.ExoPlayerFactory
+
 import com.google.android.exoplayer2.Player.*
 import com.google.android.exoplayer2.Player.EventListener
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -66,8 +66,10 @@ class VideoPlayerActivityPip : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         init()
         if (videoPlayerConfig.secureScreen) {
-            window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
-                    WindowManager.LayoutParams.FLAG_SECURE)
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
+            )
         }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_media_player)
         registerPIPBroadcasts()
@@ -78,20 +80,25 @@ class VideoPlayerActivityPip : AppCompatActivity() {
     lateinit var videoPlayerConfig: VideoPlayerConfig
     private fun init() {
         if (intent != null) {
-            videoPlayerConfig = intent.getSerializableExtra("videoPlayerConfig") as VideoPlayerConfig
+            videoPlayerConfig =
+                intent.getSerializableExtra("videoPlayerConfig") as VideoPlayerConfig
         }
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
     private fun initializePlayer() {
 
-        simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(this)
+        simpleExoPlayer = SimpleExoPlayer.Builder(this).build()
 
         val mediaSource =
-                if (videoPlayerConfig.encryptionConfig != null)
-                    ExoPlayerHelper.buildEncryptedMediaSource(this, Uri.parse(videoPlayerConfig.videoPath), videoPlayerConfig.encryptionConfig!!)
-                else
-                    ExoPlayerHelper.buildMediaSource(this, Uri.parse(videoPlayerConfig.videoPath))
+            if (videoPlayerConfig.encryptionConfig != null)
+                ExoPlayerHelper.buildEncryptedMediaSource(
+                    this,
+                    Uri.parse(videoPlayerConfig.videoPath),
+                    videoPlayerConfig.encryptionConfig!!
+                )
+            else
+                ExoPlayerHelper.buildMediaSource(this, Uri.parse(videoPlayerConfig.videoPath))
 
         simpleExoPlayer.prepare(mediaSource, false, false)
         simpleExoPlayer.seekTo(videoPlayerConfig.startTime.toLong())
@@ -137,8 +144,8 @@ class VideoPlayerActivityPip : AppCompatActivity() {
         }
 
         binding.playerView.activateDoubleTap(true)
-                .setDoubleTapDelay(300)
-                .setDoubleTapListener(binding.youtubeOverlay)
+            .setDoubleTapDelay(300)
+            .setDoubleTapListener(binding.youtubeOverlay)
         binding.youtubeOverlay.setPlayer(simpleExoPlayer)
         binding.youtubeOverlay.animationDuration = 1000
 
@@ -158,16 +165,16 @@ class VideoPlayerActivityPip : AppCompatActivity() {
         simpleExoPlayer.addVideoListener(object : VideoListener {
 
             override fun onVideoSizeChanged(
-                    width: Int,
-                    height: Int,
-                    unappliedRotationDegrees: Int,
-                    pixelWidthHeightRatio: Float
+                width: Int,
+                height: Int,
+                unappliedRotationDegrees: Int,
+                pixelWidthHeightRatio: Float
             ) {
                 super.onVideoSizeChanged(
-                        width,
-                        height,
-                        unappliedRotationDegrees,
-                        pixelWidthHeightRatio
+                    width,
+                    height,
+                    unappliedRotationDegrees,
+                    pixelWidthHeightRatio
                 )
                 videoWidth = width
                 videoHeight = height
@@ -175,7 +182,7 @@ class VideoPlayerActivityPip : AppCompatActivity() {
         })
 
         simpleExoPlayer.repeatMode =
-                if (videoPlayerConfig.loopVideo) REPEAT_MODE_ALL else REPEAT_MODE_OFF
+            if (videoPlayerConfig.loopVideo) REPEAT_MODE_ALL else REPEAT_MODE_OFF
 
         when (videoPlayerConfig.orientation) {
             VideoPlayerConfig.ORIENTATION_PORTRAIT_ONLY -> {
@@ -273,24 +280,24 @@ class VideoPlayerActivityPip : AppCompatActivity() {
         if (supportsPiPMode() && videoPlayerConfig.allowPictureInPicture) {
             if (hasPIPFeature() && !canEnterPiPMode()) {
                 AlertDialog.Builder(this)
-                        .setMessage("To watch video while using another application. Please enable Picture in picture mode")
-                        .setNegativeButton(
-                                "Not for now"
-                        ) { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                        .setPositiveButton("Allow Picture in Picture") { dialog, _ ->
-                            dialog.dismiss()
-                            requestPIPPermission()
-                        }.show()
+                    .setMessage("To watch video while using another application. Please enable Picture in picture mode")
+                    .setNegativeButton(
+                        "Not for now"
+                    ) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .setPositiveButton("Allow Picture in Picture") { dialog, _ ->
+                        dialog.dismiss()
+                        requestPIPPermission()
+                    }.show()
             }
         }
     }
 
     private fun requestPIPPermission() {
         val intent = Intent(
-                "android.settings.PICTURE_IN_PICTURE_SETTINGS",
-                Uri.parse("package:$packageName")
+            "android.settings.PICTURE_IN_PICTURE_SETTINGS",
+            Uri.parse("package:$packageName")
         )
         startActivityForResult(intent, 123)
     }
@@ -328,31 +335,31 @@ class VideoPlayerActivityPip : AppCompatActivity() {
     private fun canEnterPiPMode(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             AppOpsManagerCompat.MODE_ALLOWED == AppOpsManagerCompat.noteOpNoThrow(
-                    this,
-                    AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
-                    Process.myUid(),
-                    packageName
+                this,
+                AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
+                Process.myUid(),
+                packageName
             )
         } else false
     }
 
     private fun getPipActions(
-            intentFilerAction: String,
-            drawable: Int
+        intentFilerAction: String,
+        drawable: Int
     ): List<RemoteAction?>? {
         val intent = Intent(intentFilerAction)
         val pendingIntent = PendingIntent.getBroadcast(
-                this,
-                System.currentTimeMillis().toInt(),
-                intent,
-                PendingIntent.FLAG_ONE_SHOT
+            this,
+            System.currentTimeMillis().toInt(),
+            intent,
+            PendingIntent.FLAG_ONE_SHOT
         )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val remoteAction = RemoteAction(
-                    Icon.createWithResource(this, drawable),
-                    "Play/Pause",
-                    "As",
-                    pendingIntent
+                Icon.createWithResource(this, drawable),
+                "Play/Pause",
+                "As",
+                pendingIntent
             )
             return listOf(remoteAction)
         }
@@ -386,14 +393,14 @@ class VideoPlayerActivityPip : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getActionPlayBased(): PictureInPictureParams {
         return PictureInPictureParams.Builder()
-                .setAspectRatio(getPipRatio())
-                .setActions(
-                        getPipActions(
-                                PAUSE_BROADCAST,
-                                R.drawable.ic_pause
-                        )
+            .setAspectRatio(getPipRatio())
+            .setActions(
+                getPipActions(
+                    PAUSE_BROADCAST,
+                    R.drawable.ic_pause
                 )
-                .build()
+            )
+            .build()
     }
 
     private fun makeActionsPauseBased() {
@@ -406,14 +413,14 @@ class VideoPlayerActivityPip : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getActionPausedBased(): PictureInPictureParams {
         return PictureInPictureParams.Builder()
-                .setAspectRatio(getPipRatio())
-                .setActions(
-                        getPipActions(
-                                PLAY_BROADCAST,
-                                R.drawable.ic_play
-                        )
+            .setAspectRatio(getPipRatio())
+            .setActions(
+                getPipActions(
+                    PLAY_BROADCAST,
+                    R.drawable.ic_play
                 )
-                .build()
+            )
+            .build()
     }
 
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {

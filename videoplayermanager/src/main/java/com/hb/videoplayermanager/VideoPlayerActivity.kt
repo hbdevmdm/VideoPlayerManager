@@ -21,7 +21,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.android.exoplayer2.C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
-import com.google.android.exoplayer2.ExoPlayerFactory
+
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.Player.*
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -30,8 +30,8 @@ import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoListener
 import com.hb.videoplayermanager.databinding.ActivityMediaPlayerBinding
 import com.hb.videoplayermanager.databinding.PopupSpeedOptionBinding
-import pl.droidsonroids.casty.Casty
-import pl.droidsonroids.casty.MediaData
+import com.hb.videoplayermanager.casty.Casty
+import com.hb.videoplayermanager.casty.MediaData
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -107,7 +107,7 @@ class VideoPlayerActivity : AppCompatActivity() {
     @SuppressLint("SourceLockedOrientationActivity")
     private fun initializePlayer() {
 
-        simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(this)
+        simpleExoPlayer = SimpleExoPlayer.Builder(this).build()
 
         val mediaSource =
             if (videoPlayerConfig.encryptionConfig != null)

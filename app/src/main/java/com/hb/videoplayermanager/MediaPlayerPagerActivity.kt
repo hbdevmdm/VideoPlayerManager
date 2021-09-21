@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.adapter.FragmentViewHolder
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.exoplayer2.ExoPlayerFactory
+
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.hb.videoplayermanager.databinding.ActivityMediaPagerBinding
 import com.hb.videoplayermanager.databinding.ItemMediaPagerBinding
@@ -22,7 +22,7 @@ class MediaPlayerPagerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_media_pager)
-        simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(this)
+        simpleExoPlayer = SimpleExoPlayer.Builder(this).build()
 
 
         val adapter =
@@ -38,7 +38,7 @@ class MediaPlayerPagerActivity : AppCompatActivity() {
                 }
             }
 
-        val fragmentAdapter=object : FragmentStateAdapter(supportFragmentManager, lifecycle) {
+        val fragmentAdapter = object : FragmentStateAdapter(supportFragmentManager, lifecycle) {
             override fun getItemCount(): Int {
                 TODO("Not yet implemented")
             }

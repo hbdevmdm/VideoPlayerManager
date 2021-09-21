@@ -1,4 +1,4 @@
-package pl.droidsonroids.casty;
+package com.hb.videoplayermanager.casty;
 
 import android.net.Uri;
 

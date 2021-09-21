@@ -1,4 +1,4 @@
-package pl.droidsonroids.casty;
+package com.hb.videoplayermanager.casty;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import android.view.Menu;
 import androidx.annotation.CallSuper;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.hb.videoplayermanager.R;
 
 /**
  * Extensible {@link AppCompatActivity}, which helps with setting widgets

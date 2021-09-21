@@ -3,7 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout/activity_media_player_demo.xml" value="0.3765625" />
+        <entry key="casty/src/main/res/layout/mini_controller.xml" value="0.3765625" />
         <entry key="videoplayermanager/src/main/res/layout/exo_playback_control_view.xml" value="0.35688405797101447" />
+        <entry key="videoplayermanager/src/main/res/layout/mini_controller.xml" value="0.3765625" />
+        <entry key="videoplayermanager/src/main/res/menu/casty_discovery.xml" value="0.3765625" />
       </map>
     </option>
   </component>

@@ -1,8 +1,9 @@
-package pl.droidsonroids.casty;
+package com.hb.videoplayermanager.casty;
 
 import android.view.Menu;
 import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.media.widget.ExpandedControllerActivity;
+import com.hb.videoplayermanager.R;
 
 /**
  * Fullscreen media controls

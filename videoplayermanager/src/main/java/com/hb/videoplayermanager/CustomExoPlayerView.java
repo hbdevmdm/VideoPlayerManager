@@ -80,12 +80,12 @@ public final class CustomExoPlayerView extends PlayerView {
     private float currentVolume;
 
     private void init() {
-        ImageView ivMute = findViewById(R.id.ivMute);
+       /* ImageView ivMute = findViewById(R.id.ivMute);
         ivMute.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Toast.makeText(v.getContext(), "Mute clicked", Toast.LENGTH_SHORT).show();*/
-                Player.AudioComponent audioComponent = getPlayer().getAudioComponent();
+                *//*Toast.makeText(v.getContext(), "Mute clicked", Toast.LENGTH_SHORT).show();*//*
+               *//* Player.AudioComponent audioComponent = getPlayer().getAudioComponent();
 
                 if (audioComponent != null) {
                     if (audioComponent.getVolume() == 0.0f) {
@@ -96,9 +96,9 @@ public final class CustomExoPlayerView extends PlayerView {
                         ivMute.setImageResource(R.drawable.ic_mute);
                         audioComponent.setVolume(0.0f);
                     }
-                }
+                }*//*
             }
-        });
+        });*/
 
         findViewById(R.id.exo_speed).setOnClickListener(new OnClickListener() {
             @Override
