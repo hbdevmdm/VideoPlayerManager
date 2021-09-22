@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.media.AudioManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -44,7 +45,6 @@ import java.util.concurrent.TimeUnit
 
 class VideoPlayerActivity : AppCompatActivity() {
 
-
     private lateinit var binding: ActivityMediaPlayerBinding
     private lateinit var simpleExoPlayer: SimpleExoPlayer
 
@@ -80,16 +80,12 @@ class VideoPlayerActivity : AppCompatActivity() {
         casty?.setOnConnectChangeListener(object : Casty.OnConnectChangeListener {
             override fun onConnected() {
                 simpleExoPlayer.pause()
-                Log.e("Asdas", "xxx")
             }
 
             override fun onDisconnected() {
                 simpleExoPlayer.play()
-                Log.e("Asdas", "yyy")
             }
         })
-
-
 
         castButton.setOnClickListener {
             if (casty?.isConnected == true) {
@@ -109,8 +105,7 @@ class VideoPlayerActivity : AppCompatActivity() {
             }
 
         }
-
-        val closeButton = findViewById<View>(R.id.ivClose).setOnClickListener { finish() }
+        findViewById<View>(R.id.ivClose).setOnClickListener { finish() }
         requestDrmText()
     }
 
@@ -240,7 +235,8 @@ class VideoPlayerActivity : AppCompatActivity() {
             showSpeedPopup(it)
         }
 
-        /*findViewById<DefaultTimeBar>(R.id.exo_progress).addListener(object:TimeBar.OnScrubListener{
+        findViewById<DefaultTimeBar>(R.id.exo_progress).addListener(object :
+            TimeBar.OnScrubListener {
             override fun onScrubStart(timeBar: TimeBar, position: Long) {
 
             }
@@ -250,9 +246,11 @@ class VideoPlayerActivity : AppCompatActivity() {
             }
 
             override fun onScrubStop(timeBar: TimeBar, position: Long, canceled: Boolean) {
-                *//*CastContext.getSharedInstance()?.sessionManager?.currentCastSession?.remoteMediaClient?.seek(position)*//*
+                CastContext.getSharedInstance()?.sessionManager?.currentCastSession?.remoteMediaClient?.seek(
+                    position
+                )
             }
-        })*/
+        })
 
         binding.ivPip.visibility = View.GONE
     }
@@ -397,6 +395,12 @@ class VideoPlayerActivity : AppCompatActivity() {
         binding.tvRandomText.layoutParams = lp
         binding.tvRandomText.visibility = View.VISIBLE
         hideHandler.postDelayed(hideRunnable, HIDE_DURATION)
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        CastContext.getSharedInstance()?.sessionManager?.currentCastSession?.remoteMediaClient?.stop()
     }
 
 }

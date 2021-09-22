@@ -21,5 +21,7 @@
         <activity
             android:name=".casty.ExpandedControlsActivity"
             android:theme="@style/Theme.CastVideosDark" />
+
+        <service android:name=".KillAppService"/>
     </application>
 </manifest>

@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rlControlView"
+    android:paddingLeft="25dp"
+    android:paddingRight="25dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/vp_black_bg"
@@ -75,7 +77,7 @@
             android:id="@+id/ivMute"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_mute" />
+            android:src="@drawable/ic_unmute" />
 
         <com.google.android.exoplayer2.ui.DefaultTimeBar
             android:id="@id/exo_progress"
@@ -125,8 +127,7 @@
         <FrameLayout
             android:id="@+id/exo_fullscreen_button"
             android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_margin="5dp">
+            android:layout_height="32dp">
 
             <ImageView
                 android:id="@+id/exo_fullscreen_icon"
@@ -139,6 +140,13 @@
 
         </FrameLayout>
 
+        <androidx.mediarouter.app.MediaRouteButton
+            android:id="@+id/media_route_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:foregroundTint="@android:color/white"
+            android:padding="10dp"
+            app:mediaRouteButtonTint="@android:color/white" />
     </LinearLayout>
 
 
@@ -159,16 +167,7 @@
         android:background="@drawable/ic_round_background" />
 
 
-    <androidx.mediarouter.app.MediaRouteButton
-        android:id="@+id/media_route_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="50dp"
-        android:background="@drawable/rounded_rect_white"
-        android:padding="10dp" />
+
 
     <ImageView
         android:id="@+id/ivClose"

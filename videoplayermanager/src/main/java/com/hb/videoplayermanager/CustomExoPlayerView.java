@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.core.view.GestureDetectorCompat;
 
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.PlayerView;
@@ -81,45 +82,29 @@ public final class CustomExoPlayerView extends PlayerView {
     private float currentVolume;
 
     private void init() {
-      /*  ImageView ivMute = findViewById(R.id.ivMute);
-        ivMute.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Mute clicked", Toast.LENGTH_SHORT).show();
-                Player.AudioComponent audioComponent = getPlayer().getAudioComponent();
-
-                if (audioComponent != null) {
-                    if (audioComponent.getVolume() == 0.0f) {
-                        ivMute.setImageResource(R.drawable.ic_unmute);
-                        audioComponent.setVolume(currentVolume);
-                    } else {
-                        currentVolume = audioComponent.getVolume();
-                        ivMute.setImageResource(R.drawable.ic_mute);
-                        audioComponent.setVolume(0.0f);
-                    }
+        ImageView ivMute = findViewById(R.id.ivMute);
+        ivMute.setOnClickListener(v -> {
+            if (getPlayer() != null) {
+                if (getPlayer().getVolume() == 0.0f) {
+                    ivMute.setImageResource(R.drawable.ic_unmute);
+                    getPlayer().setVolume(currentVolume);
+                } else {
+                    currentVolume = getPlayer().getVolume();
+                    ivMute.setImageResource(R.drawable.ic_mute);
+                    getPlayer().setVolume(0.0f);
                 }
-            }
-        });*/
-
-        findViewById(R.id.exo_speed).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*Toast.makeText(v.getContext(), "Speed clicked", Toast.LENGTH_SHORT).show();*/
-                showSpeedPopup(v);
             }
         });
 
+        findViewById(R.id.exo_speed).setOnClickListener(this::showSpeedPopup);
 
-        findViewById(R.id.exo_fullscreen_button).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                VideoPlayerConfig videoPlayerConfig = new VideoPlayerConfig.Builder().videoPath(url)
-                        .orientation(VideoPlayerConfig.ORIENTATION_USER_ORIENTATION)
-                        .setStartTime(getPlayer().getCurrentPosition())
-                        .autoPlay(true)
-                        .build();
-                getContext().startActivity(VideoPlayerActivity.Companion.createIntent(getContext(), videoPlayerConfig));
-            }
+        findViewById(R.id.exo_fullscreen_button).setOnClickListener(v -> {
+            VideoPlayerConfig videoPlayerConfig = new VideoPlayerConfig.Builder().videoPath(url)
+                    .orientation(VideoPlayerConfig.ORIENTATION_USER_ORIENTATION)
+                    .setStartTime(getPlayer().getCurrentPosition())
+                    .autoPlay(true)
+                    .build();
+            getContext().startActivity(VideoPlayerActivity.Companion.createIntent(getContext(), videoPlayerConfig));
         });
 
         setShowBuffering(PlayerView.SHOW_BUFFERING_ALWAYS);
