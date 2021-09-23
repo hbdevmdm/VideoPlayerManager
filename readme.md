@@ -27,7 +27,7 @@ Grab via Maven:
 ```
 or Gradle:
 ```groovy
-implementation 'com.hb.videoeditor:videoplayer:1.1'
+implementation "com.github.hbdevmdm:VideoPlayerManager:7.0"
 ```
 
 # How it works?
