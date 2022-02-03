@@ -105,7 +105,7 @@ class VideoPlayerActivity : AppCompatActivity() {
             }
 
         }
-        findViewById<View>(R.id.ivClose).setOnClickListener { finish() }
+        findViewById<View>(R.id.ivClose).setOnClickListener { finishMe() }
         requestDrmText()
     }
 
@@ -154,7 +154,7 @@ class VideoPlayerActivity : AppCompatActivity() {
                     STATE_IDLE -> {
                     }
                     STATE_ENDED -> {
-                        finish()
+                       finishMe()
                     }
                 }
             }
@@ -224,11 +224,7 @@ class VideoPlayerActivity : AppCompatActivity() {
         }
 
         findViewById<View>(R.id.exo_fullscreen_icon).setOnClickListener {
-            val intent = Intent()
-            intent.putExtra("seekPosition", simpleExoPlayer.contentPosition)
-            intent.putExtra("isPlaying", simpleExoPlayer.isPlaying)
-            setResult(Activity.RESULT_OK, intent)
-            finish()
+           finishMe()
         }
 
         findViewById<View>(R.id.exo_speed).setOnClickListener {
@@ -403,4 +399,11 @@ class VideoPlayerActivity : AppCompatActivity() {
         CastContext.getSharedInstance()?.sessionManager?.currentCastSession?.remoteMediaClient?.stop()
     }
 
+    private fun finishMe() {
+        val intent = Intent()
+        intent.putExtra("seekPosition", simpleExoPlayer.contentPosition)
+        intent.putExtra("isPlaying", simpleExoPlayer.isPlaying)
+        setResult(Activity.RESULT_OK, intent)
+        finish()
+    }
 }
